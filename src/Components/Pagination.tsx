@@ -12,16 +12,44 @@ const Pagination: React.FC<PaginationProps> = ({
   lastPage,
   onPageChange,
 }) => {
-  let pages: (number | null)[] = [];
+  console.log(lastPage);
 
-  if (page > firstPage + 3 && page < lastPage - 3) {
-    pages = [1, null, page - 2, page - 1, page, page + 1, page + 2, null, 500];
-  } else if (page <= firstPage + 3) {
-    pages = [1, 2, 3, 4, 5, 6, null, 500];
-  } else if (page >= lastPage - 3) {
-    pages = [1, null, 495, 496, 497, 498, 499, 500];
-  }
+  const generatePages = () => {
+    if (lastPage <= 6) {
+      return Array.from({ length: lastPage }, (_, i) => i + 1);
+    }
 
+    if (page > firstPage + 3 && page < lastPage - 3) {
+      return [
+        1,
+        null,
+        page - 2,
+        page - 1,
+        page,
+        page + 1,
+        page + 2,
+        null,
+        lastPage,
+      ];
+    }
+
+    if (page <= firstPage + 3) {
+      return [1, 2, 3, 4, 5, 6, null, lastPage];
+    }
+
+    return [
+      1,
+      null,
+      lastPage - 5,
+      lastPage - 4,
+      lastPage - 3,
+      lastPage - 2,
+      lastPage - 1,
+      lastPage,
+    ];
+  };
+
+  const pages: (number | null)[] = generatePages();
   return (
     <div className="mt-7 flex w-full gap-2 justify-center">
       <button

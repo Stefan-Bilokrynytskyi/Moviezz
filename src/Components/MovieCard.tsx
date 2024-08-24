@@ -27,7 +27,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => {
     </div>
   );
   return (
-    <div className="w-1/6 mb-5 flex-grow h-fit">
+    <div className="mb-5 h-fit">
       {poster}
       <h3 className="text-lightGrey text-lg mt-1">{movie.title}</h3>
       <p className="text-lightGrey text-sm flex items-start">

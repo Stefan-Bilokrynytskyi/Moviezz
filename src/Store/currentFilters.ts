@@ -47,6 +47,32 @@ const filtersSlice = createSlice({
     setPreviousFilters(state, action) {
       state.previousFilters = action.payload.filters;
     },
+    cancelFilters(state) {
+      state.filters = state.filters.map((filter) => {
+        filter.parameters = [];
+        return filter;
+      });
+      state.previousFilters = "";
+    },
+    resetFilters(state) {
+      const previousFilters = state.previousFilters;
+
+      const filtersArray = previousFilters.split("&").filter(Boolean);
+
+      state.filters = state.filters.map((filter) => {
+        const matchingFilter = filtersArray.find((param) =>
+          param.startsWith(filter.urlParameter + "=")
+        );
+
+        if (matchingFilter) {
+          const parametersString = matchingFilter.split("=")[1];
+          filter.parameters = parametersString.split("|");
+        } else {
+          filter.parameters = [];
+        }
+        return filter;
+      });
+    },
   },
 });
 

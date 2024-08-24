@@ -26,25 +26,24 @@ const FilmsPage: React.FC = () => {
   const queryParameters: string = queryParams.toString();
   const page: number = Number(queryParams.get("page")) || 1;
 
-  console.log(queryParameters);
-
-  const filters: {
-    name: string;
-    parameters: string[];
-    urlParameter: string;
-  }[] = useSelector((state: { filters: RootState }) => state.filters.filters);
+  const filters: RootState = useSelector(
+    (state: { filters: RootState }) => state.filters
+  );
 
   const navigate = useNavigate();
 
-  const { data, isLoading, isError, error }: UseQueryResult<Movie[]> = useQuery(
-    {
-      queryKey: ["movies", queryParameters],
-      queryFn: () =>
-        fetchMovies(
-          `discover/movie?language=en-US&vote_count.gte=300&${queryParameters}`
-        ),
-    }
-  );
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+  }: UseQueryResult<{ movies: Movie[]; totalPages: number }> = useQuery({
+    queryKey: ["movies", queryParameters],
+    queryFn: () =>
+      fetchMovies(
+        `discover/movie?language=en-US&vote_count.gte=300&${queryParameters}`
+      ),
+  });
   const [dropDowns, setDropDowns] = useState<Dropdown[]>([
     { name: "Sort", isOpen: false },
     { name: "Filter", isOpen: false },
@@ -70,6 +69,9 @@ const FilmsPage: React.FC = () => {
   const onPageChange = (pageNumber: number) => {
     queryParams.set("page", pageNumber.toString());
     const queryParameters = decodeURIComponent(queryParams.toString());
+    setDropDowns((prevDropDowns) =>
+      prevDropDowns.map((dropDown) => ({ ...dropDown, isOpen: false }))
+    );
     navigate(`?${queryParameters}`);
     queryClient.invalidateQueries({
       queryKey: ["movies", queryParameters],
@@ -77,9 +79,24 @@ const FilmsPage: React.FC = () => {
   };
 
   const onSortChange = (sortParameter: string) => {
+    const currentFilters = filters.filters.reduce((acc, filter) => {
+      if (filter.parameters.length > 0) {
+        acc += filter.urlParameter + "=" + filter.parameters.join("|") + "&";
+
+        return acc;
+      }
+      return acc;
+    }, "");
+    if (currentFilters !== filters.previousFilters) {
+      console.log("here");
+      dispatch(filtersActions.resetFilters());
+    }
     queryParams.set("sort_by", sortParameter);
     queryParams.set("page", "1");
     const queryParameters = decodeURIComponent(queryParams.toString());
+    setDropDowns((prevDropDowns) =>
+      prevDropDowns.map((dropDown) => ({ ...dropDown, isOpen: false }))
+    );
     navigate(`?${queryParameters}`);
     queryClient.invalidateQueries({
       queryKey: ["movies", queryParameters],
@@ -88,7 +105,7 @@ const FilmsPage: React.FC = () => {
 
   const onFilterChange = () => {
     let previousFilters = "";
-    filters.forEach((filter) => {
+    filters.filters.forEach((filter) => {
       if (filter.parameters.length > 0) {
         queryParams.set(filter.urlParameter, filter.parameters.join("|"));
         previousFilters +=
@@ -96,6 +113,9 @@ const FilmsPage: React.FC = () => {
       } else queryParams.delete(filter.urlParameter);
     });
     dispatch(filtersActions.setPreviousFilters({ filters: previousFilters }));
+    setDropDowns((prevDropDowns) =>
+      prevDropDowns.map((dropDown) => ({ ...dropDown, isOpen: false }))
+    );
     queryParams.set("page", "1");
 
     const queryParameters = decodeURIComponent(queryParams.toString());
@@ -105,6 +125,23 @@ const FilmsPage: React.FC = () => {
       queryKey: ["movies", queryParameters],
     });
   };
+
+  const onFilterCancel = () => {
+    filters.filters.forEach((filter) => {
+      queryParams.delete(filter.urlParameter);
+    });
+    dispatch(filtersActions.cancelFilters());
+    setDropDowns((prevDropDowns) =>
+      prevDropDowns.map((dropDown) => ({ ...dropDown, isOpen: false }))
+    );
+    queryParams.set("page", "1");
+    const queryParameters = decodeURIComponent(queryParams.toString());
+    navigate(`?${queryParameters}`);
+    queryClient.invalidateQueries({
+      queryKey: ["movies", queryParameters],
+    });
+  };
+
   let content: JSX.Element | null = null;
 
   if (isLoading) {
@@ -119,8 +156,8 @@ const FilmsPage: React.FC = () => {
       <div className="mx-28 my-12">
         <div className="flex justify-between">
           <h2 className="text-lightGrey text-5xl mb-5">Popular movies</h2>
-          <div className="flex gap-6">
-            <div ref={filterRef}>
+          <div className="relative flex gap-6">
+            <div ref={filterRef} className="flex items-center">
               <Filter
                 toggleDropdown={toggleDropDown}
                 isOpen={
@@ -128,9 +165,10 @@ const FilmsPage: React.FC = () => {
                     ?.isOpen ?? false
                 }
                 onFilterChange={onFilterChange}
+                onFilterCancel={onFilterCancel}
               />
             </div>
-            <div ref={sortRef}>
+            <div ref={sortRef} className="relative flex items-center">
               <Sort
                 toggleDropdown={toggleDropDown}
                 isOpen={
@@ -143,15 +181,15 @@ const FilmsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex gap-x-8 flex-wrap">
-          {data.map((movie) => (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-x-8">
+          {data.movies.map((movie) => (
             <MovieCard movie={movie} key={movie.id} />
           ))}
         </div>
         <Pagination
           page={page}
           firstPage={1}
-          lastPage={500}
+          lastPage={Number(data.totalPages)}
           onPageChange={onPageChange}
         />
       </div>

@@ -12,7 +12,7 @@ const Sort: React.FC<SortProps> = ({
   onSortChange,
 }) => {
   return (
-    <div className="relative flex items-center">
+    <div className="flex items-center">
       <button onClick={() => toggleDropdown("Sort")}>
         <div className="flex items-center gap-2">
           <img src={sortIcon} alt="sort" className="w-6 h-6" />

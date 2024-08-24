@@ -10,6 +10,7 @@ interface FilterProps {
   toggleDropdown: (name: string) => void;
   isOpen: boolean;
   onFilterChange: () => void;
+  onFilterCancel: () => void;
 }
 interface FilterParameter {
   name: string;
@@ -19,6 +20,7 @@ const Filter: React.FC<FilterProps> = ({
   toggleDropdown,
   isOpen,
   onFilterChange,
+  onFilterCancel,
 }) => {
   const [currentFilter, setCurrentFilter] = useState<FilterParameter | null>(
     null
@@ -35,6 +37,11 @@ const Filter: React.FC<FilterProps> = ({
     }
     return acc;
   }, "");
+
+  const onToggleDropdown = (name: string) => {
+    setCurrentFilter(null);
+    toggleDropdown(name);
+  };
 
   const isFiltersChanged: boolean = currentFilters === filters.previousFilters;
 
@@ -56,8 +63,8 @@ const Filter: React.FC<FilterProps> = ({
     </>
   );
   return (
-    <div className="relative flex items-center">
-      <button onClick={() => toggleDropdown("Filter")}>
+    <div className="flex items-center">
+      <button onClick={() => onToggleDropdown("Filter")}>
         <div className="flex items-center gap-2">
           <img src={filterIcon} alt="sort" className="w-6 h-6" />
           <h3 className="text-lightGrey text-2xl">Filter</h3>
@@ -70,7 +77,7 @@ const Filter: React.FC<FilterProps> = ({
         >
           {content}
           <div className="flex justify-between px-2 my-2">
-            <Button onClick={() => {}}>Cancel</Button>
+            <Button onClick={onFilterCancel}>Cancel</Button>
             <Button onClick={onFilterChange} disabled={isFiltersChanged}>
               Apply
             </Button>
