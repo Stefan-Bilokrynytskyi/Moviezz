@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 12px; /* Ширина полосы прокрутки */
+  height: 8px; /* Высота полосы прокрутки */
+}
+
+::-webkit-scrollbar-track {
+  background: #0f151c; /* Цвет трека полосы прокрутки */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #2c2d2e; /* Цвет ползунка полосы прокрутки */
+  border-radius: 2px; /* Радиус закругления ползунка */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #363738; /* Цвет ползунка при наведении */
+}
+
+/* Стилизация горизонтальной полосы прокрутки */
+::-webkit-scrollbar-horizontal {
+  height: 8px; /* Высота горизонтальной полосы прокрутки */
+}
+
+::-webkit-scrollbar-thumb-horizontal {
+  height: 8px; /* Высота ползунка горизонтальной полосы прокрутки */
+  background-color: #2c2d2e; /* Цвет ползунка */
+  border-radius: 10px; /* Радиус закругления ползунка */
+}
+
+::-webkit-scrollbar-thumb-horizontal:hover {
+  background: #363738; /* Цвет ползунка при наведении */
+}
+
+ul::-webkit-scrollbar {
+  width: 8px; /* Уменьшенная ширина полосы прокрутки */
+}
+ul::-webkit-scrollbar-track {
+  background: #0f151c;
+}
+ul::-webkit-scrollbar-thumb {
+  background-color: #2c2d2e;
+  border-radius: 2px;
+}
+ul::-webkit-scrollbar-thumb:hover {
+  background: #363738;
+}
