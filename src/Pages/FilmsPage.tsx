@@ -7,12 +7,14 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../Components/Pagination";
 import Sort from "../Components/Sort";
 import Filter from "../Components/Filter";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { queryClient } from "../http/http";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../Store/currentFilters";
 import { filtersActions } from "../Store/currentFilters";
 import useClickOutside from "../hooks/useClickOutside";
+import { getStringFromFilters } from "../utils";
+import useMount from "../hooks/useMount";
 
 interface Dropdown {
   name: string;
@@ -23,14 +25,8 @@ const FilmsPage: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const queryParameters: string = queryParams.toString();
+  const queryParameters: string = decodeURIComponent(queryParams.toString());
   const page: number = Number(queryParams.get("page")) || 1;
-
-  const filters: RootState = useSelector(
-    (state: { filters: RootState }) => state.filters
-  );
-
-  const navigate = useNavigate();
 
   const {
     data,
@@ -44,10 +40,17 @@ const FilmsPage: React.FC = () => {
         `discover/movie?language=en-US&vote_count.gte=300&${queryParameters}`
       ),
   });
+
   const [dropDowns, setDropDowns] = useState<Dropdown[]>([
     { name: "Sort", isOpen: false },
     { name: "Filter", isOpen: false },
   ]);
+
+  const filters: RootState = useSelector(
+    (state: { filters: RootState }) => state.filters
+  );
+
+  const navigate = useNavigate();
 
   const sortRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
@@ -55,6 +58,14 @@ const FilmsPage: React.FC = () => {
   useClickOutside([sortRef, filterRef], () => {
     setDropDowns((prevDropDowns) =>
       prevDropDowns.map((dropDown) => ({ ...dropDown, isOpen: false }))
+    );
+  });
+
+  useMount(() => {
+    dispatch(
+      filtersActions.setFilters({
+        queryParameters,
+      })
     );
   });
 
@@ -79,14 +90,7 @@ const FilmsPage: React.FC = () => {
   };
 
   const onSortChange = (sortParameter: string) => {
-    const currentFilters = filters.filters.reduce((acc, filter) => {
-      if (filter.parameters.length > 0) {
-        acc += filter.urlParameter + "=" + filter.parameters.join("|") + "&";
-
-        return acc;
-      }
-      return acc;
-    }, "");
+    const currentFilters = getStringFromFilters(filters.filters);
     if (currentFilters !== filters.previousFilters) {
       console.log("here");
       dispatch(filtersActions.resetFilters());
@@ -104,15 +108,16 @@ const FilmsPage: React.FC = () => {
   };
 
   const onFilterChange = () => {
-    let previousFilters = "";
     filters.filters.forEach((filter) => {
       if (filter.parameters.length > 0) {
         queryParams.set(filter.urlParameter, filter.parameters.join("|"));
-        previousFilters +=
-          filter.urlParameter + "=" + filter.parameters.join("|") + "&";
       } else queryParams.delete(filter.urlParameter);
     });
-    dispatch(filtersActions.setPreviousFilters({ filters: previousFilters }));
+    dispatch(
+      filtersActions.setPreviousFilters({
+        filters: getStringFromFilters(filters.filters),
+      })
+    );
     setDropDowns((prevDropDowns) =>
       prevDropDowns.map((dropDown) => ({ ...dropDown, isOpen: false }))
     );

@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Filter } from "../Models/Filter";
+import { getFiltersFromString, getStringFromFilters } from "../utils";
 
 export interface RootState {
-  filters: { name: string; parameters: string[]; urlParameter: string }[];
+  filters: Filter[];
   previousFilters: string;
 }
 
@@ -56,22 +58,16 @@ const filtersSlice = createSlice({
     },
     resetFilters(state) {
       const previousFilters = state.previousFilters;
-
-      const filtersArray = previousFilters.split("&").filter(Boolean);
-
-      state.filters = state.filters.map((filter) => {
-        const matchingFilter = filtersArray.find((param) =>
-          param.startsWith(filter.urlParameter + "=")
-        );
-
-        if (matchingFilter) {
-          const parametersString = matchingFilter.split("=")[1];
-          filter.parameters = parametersString.split("|");
-        } else {
-          filter.parameters = [];
-        }
-        return filter;
-      });
+      state.filters = getFiltersFromString(previousFilters, state.filters);
+    },
+    setFilters(state, action) {
+      console.log("sdhbhs" + action.payload.queryParameters);
+      const filters = getFiltersFromString(
+        action.payload.queryParameters,
+        state.filters
+      );
+      state.previousFilters = getStringFromFilters(filters);
+      state.filters = filters;
     },
   },
 });
