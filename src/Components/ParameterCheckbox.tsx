@@ -26,7 +26,7 @@ const ParameterCheckbox: React.FC<ParameterCheckboxProps> = ({
         checked={isChecked}
         onChange={() => handleClickCheckbox(isChecked, linkName)}
       />
-      <h3 className="text-lightGrey text-lg">{name}</h3>
+      <h3 className="text-lightGrey text-lg text-left grow">{name}</h3>
     </button>
   );
 };

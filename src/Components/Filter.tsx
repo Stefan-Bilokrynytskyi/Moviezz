@@ -1,5 +1,5 @@
 import filterIcon from "../Icons/filter.svg";
-import { filterParameters } from "../data";
+import { filterParameters } from "../ConfigurationData/FilterParameters";
 import Button from "./Button";
 import FilterParametersList from "./FilterParametersList";
 import FilterListItem from "./FilterListItem";

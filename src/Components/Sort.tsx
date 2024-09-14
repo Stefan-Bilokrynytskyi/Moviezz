@@ -1,5 +1,5 @@
 import sortIcon from "../Icons/sort.svg";
-import { sortingParameters } from "../data";
+import { sortingParameters } from "../ConfigurationData/SortParameters";
 
 interface SortProps {
   toggleDropdown: (name: string) => void;

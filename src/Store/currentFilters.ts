@@ -19,6 +19,11 @@ const initialFiltersState: RootState = {
       parameters: [],
       urlParameter: "primary_release_year",
     },
+    {
+      name: "Country",
+      parameters: [],
+      urlParameter: "with_origin_country",
+    },
   ],
   previousFilters: "",
 };

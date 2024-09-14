@@ -1,11 +1,12 @@
-import { Movie } from "../Models/MoviesModels";
+import { MovieCardData } from "../Models/MoviesModels";
 import star from "../Icons/star.svg";
 import Projector from "../Icons/projector.svg";
-import genres from "../data";
+import GENRES from "../ConfigurationData/genres";
+import { Link } from "react-router-dom";
 
-const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => {
+const MovieCard: React.FC<{ movie: MovieCardData }> = ({ movie }) => {
   const genresList: string = movie.genre_ids.reduce((acc, genreId) => {
-    const genre = genres.find((genre) => genre.id === genreId);
+    const genre = GENRES.find((genre) => genre.id === genreId);
     if (genre) {
       return acc + genre.name + ", ";
     }
@@ -27,19 +28,22 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => {
     </div>
   );
   return (
-    <div className="mb-5 h-fit">
-      {poster}
-      <h3 className="text-lightGrey text-lg mt-1">{movie.title}</h3>
-      <p className="text-lightGrey text-sm flex items-start">
-        <img src={star} alt="star" />
-        <span className="text-lightOrange ml-1">
-          {movie.vote_average.toFixed(1)}
-        </span>
-        <span className="text-grey ml-2">
-          {movie.release_date.slice(0, 4)}, {genresList.slice(0, -2)}
-        </span>
-      </p>
-    </div>
+    <Link to={`/movies/${movie.id}`}>
+      <div className="mb-5 h-fit">
+        {poster}
+        <h3 className="text-lightGrey text-lg mt-1">{movie.title}</h3>
+
+        <p className="text-lightGrey text-sm flex items-start">
+          <img src={star} alt="star" />
+          <span className="text-lightOrange ml-1">
+            {movie.vote_average.toFixed(1)}
+          </span>
+          <span className="text-grey ml-2">
+            {movie.release_date.slice(0, 4)}, {genresList.slice(0, -2)}
+          </span>
+        </p>
+      </div>
+    </Link>
   );
 };
 

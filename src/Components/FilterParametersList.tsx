@@ -1,8 +1,7 @@
-import { FilterParameters } from "../data";
+import { FilterParameters } from "../ConfigurationData/FilterParameters";
 import ParameterCheckbox from "./ParameterCheckbox";
 import arrowLeft from "../Icons/arrow-left.svg";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
 import { RootState } from "../Store/currentFilters";
 import { useSelector } from "react-redux";
 import { filtersActions } from "../Store/currentFilters";
