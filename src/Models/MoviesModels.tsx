@@ -9,7 +9,6 @@ export interface MovieCardData {
 }
 
 export interface MovieData {
-  id: number;
   title: string;
   original_title: string;
   overview: string;
@@ -19,5 +18,9 @@ export interface MovieData {
   country: string;
   actors: string[];
   director: string;
+  trailer: string;
+  runtime: string;
+  popularity: number;
+  revenue: number;
   genres: string[];
 }

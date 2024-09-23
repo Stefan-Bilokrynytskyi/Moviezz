@@ -165,7 +165,6 @@ const SearchFilmsPage: React.FC = () => {
       <div className="mx-28 my-12">
         <div className="flex justify-between">
           <h2 className="text-lightGrey text-5xl mb-5">Popular movies</h2>
-          <Link to="/movies/123123">ksdjnsj</Link>
           <div className="relative flex gap-6">
             <div ref={filterRef} className="flex items-center">
               <Filter
