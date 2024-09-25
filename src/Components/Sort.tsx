@@ -1,15 +1,16 @@
 import sortIcon from "../Icons/sort.svg";
-import { sortingParameters } from "../ConfigurationData/SortParameters";
 
 interface SortProps {
   toggleDropdown: (name: string) => void;
   isOpen: boolean;
   onSortChange: (sortParameter: string) => void;
+  sortingParameters: { name: string; linkName: string }[];
 }
 const Sort: React.FC<SortProps> = ({
   toggleDropdown,
   isOpen,
   onSortChange,
+  sortingParameters,
 }) => {
   return (
     <div className="flex items-center">

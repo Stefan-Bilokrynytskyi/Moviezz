@@ -3,6 +3,7 @@ import MainPage from "./Pages/MainPage";
 import RootLayout from "./Pages/Root";
 import SearchFilmsPage from "./Pages/SearchFilmsPage";
 import FilmPage from "./Pages/FilmPage";
+import SearchTvShowsPage from "./Pages/SearchTvShowsPage";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,10 @@ const router = createBrowserRouter([
       {
         path: "movies",
         element: <SearchFilmsPage />,
-        children: [],
+      },
+      {
+        path: "tv-shows",
+        element: <SearchTvShowsPage />,
       },
       { path: "movies/:id", element: <FilmPage /> },
     ],

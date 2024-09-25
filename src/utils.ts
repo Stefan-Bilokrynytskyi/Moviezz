@@ -5,7 +5,6 @@ const getFiltersFromString = (
   filters: Filter[]
 ): Filter[] => {
   const filtersArray = filtersUrl.split("&").filter(Boolean);
-  console.log("hereer1212" + filtersUrl + filters);
 
   return filters.map((filter) => {
     const matchingFilter = filtersArray.find((param) =>

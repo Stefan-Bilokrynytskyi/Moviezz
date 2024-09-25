@@ -1,29 +1,30 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { fetchMovies } from "../http/queries";
-import { MovieCardData } from "../Models/MoviesModels";
-import MovieCard from "../Components/MovieCard";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { fetchTvShows } from "../http/queries";
+import { TvShowCardData } from "../Models/TvShowsModels";
+import TvShowCard from "../Components/TvShowCard";
 import NothingFound from "../Components/NothingFound";
-import { Link, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import Pagination from "../Components/Pagination";
+import { useState, useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../Store/currentFilters";
+import { useNavigate } from "react-router-dom";
+import useClickOutside from "../hooks/useClickOutside";
+import useMount from "../hooks/useMount";
+import { filtersActions } from "../Store/currentFilters";
+import { queryClient } from "../http/http";
+import { getStringFromFilters } from "../utils";
 import Sort from "../Components/Sort";
 import Filter from "../Components/Filter";
-import { useState, useRef } from "react";
-import { queryClient } from "../http/http";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../Store/currentFilters";
-import { filtersActions } from "../Store/currentFilters";
-import useClickOutside from "../hooks/useClickOutside";
-import { getStringFromFilters } from "../utils";
-import useMount from "../hooks/useMount";
-import { sortingParametersMovies } from "../ConfigurationData/SortParameters";
+import { sortingParametersTvShows } from "../ConfigurationData/SortParameters";
 
 interface Dropdown {
   name: string;
   isOpen: boolean;
 }
 
-const SearchFilmsPage: React.FC = () => {
+const SearchTvShowsPage: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -35,15 +36,14 @@ const SearchFilmsPage: React.FC = () => {
     isLoading,
     isError,
     error,
-  }: UseQueryResult<{ movies: MovieCardData[]; totalPages: number }> = useQuery(
-    {
-      queryKey: ["movies", queryParameters],
+  }: UseQueryResult<{ tvShows: TvShowCardData[]; totalPages: number }> =
+    useQuery({
+      queryKey: ["tvshows", queryParameters],
       queryFn: () =>
-        fetchMovies(
-          `discover/movie?language=en-US&vote_count.gte=200&${queryParameters}`
+        fetchTvShows(
+          `discover/tv?language=en-US&vote_count.gte=200&${queryParameters}`
         ),
-    }
-  );
+    });
 
   const [dropDowns, setDropDowns] = useState<Dropdown[]>([
     { name: "Sort", isOpen: false },
@@ -71,7 +71,7 @@ const SearchFilmsPage: React.FC = () => {
         queryParameters,
       })
     );
-    dispatch(filtersActions.setContentType({ contentType: "movie" }));
+    dispatch(filtersActions.setContentType({ contentType: "tv" }));
   });
 
   const toggleDropDown = (name: string) => {
@@ -97,6 +97,7 @@ const SearchFilmsPage: React.FC = () => {
   const onSortChange = (sortParameter: string) => {
     const currentFilters = getStringFromFilters(filters.filters);
     if (currentFilters !== filters.previousFilters) {
+      console.log("here");
       dispatch(filtersActions.resetFilters());
     }
     queryParams.set("sort_by", sortParameter);
@@ -161,11 +162,11 @@ const SearchFilmsPage: React.FC = () => {
     content = <div>Error: {(error as Error).message}</div>;
   }
   if (data) {
-    const anyMovies = data.movies.length > 0;
+    const anyTvShows = data.tvShows.length > 0;
     content = (
       <div className="mx-28 my-12">
         <div className="flex justify-between">
-          <h2 className="text-lightGrey text-5xl mb-5">Movies</h2>
+          <h2 className="text-lightGrey text-5xl mb-5">TV Shows</h2>
           <div className="relative flex gap-6">
             <div ref={filterRef} className="flex items-center">
               <Filter
@@ -186,22 +187,22 @@ const SearchFilmsPage: React.FC = () => {
                     ?.isOpen ?? false
                 }
                 onSortChange={onSortChange}
-                sortingParameters={sortingParametersMovies}
+                sortingParameters={sortingParametersTvShows}
               />
             </div>
           </div>
         </div>
 
-        {anyMovies ? (
+        {anyTvShows ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-8">
-            {data.movies.map((movie) => (
-              <MovieCard movie={movie} key={movie.id} />
+            {data.tvShows.map((tvShow) => (
+              <TvShowCard tvShow={tvShow} key={tvShow.id} />
             ))}
           </div>
         ) : (
           <NothingFound />
         )}
-        {anyMovies && (
+        {anyTvShows && (
           <Pagination
             page={page}
             firstPage={1}
@@ -217,4 +218,4 @@ const SearchFilmsPage: React.FC = () => {
   return <>{content}</>;
 };
 
-export default SearchFilmsPage;
+export default SearchTvShowsPage;

@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Filter } from "../Models/Filter";
 import { getFiltersFromString, getStringFromFilters } from "../utils";
+import { stat } from "fs";
 
 export interface RootState {
   filters: Filter[];
   previousFilters: string;
+  contentType: "movie" | "tv";
 }
 
 const initialFiltersState: RootState = {
@@ -26,6 +28,7 @@ const initialFiltersState: RootState = {
     },
   ],
   previousFilters: "",
+  contentType: "movie",
 };
 
 const filtersSlice = createSlice({
@@ -66,13 +69,27 @@ const filtersSlice = createSlice({
       state.filters = getFiltersFromString(previousFilters, state.filters);
     },
     setFilters(state, action) {
-      console.log("sdhbhs" + action.payload.queryParameters);
       const filters = getFiltersFromString(
         action.payload.queryParameters,
         state.filters
       );
       state.previousFilters = getStringFromFilters(filters);
       state.filters = filters;
+    },
+    setContentType(state, action) {
+      state.contentType = action.payload.contentType;
+      state.filters = state.filters.map((filter) => {
+        if (filter.name === "Year") {
+          return {
+            ...filter,
+            urlParameter:
+              action.payload.contentType === "movie"
+                ? "primary_release_year"
+                : "first_air_date_year",
+          };
+        }
+        return filter;
+      });
     },
   },
 });

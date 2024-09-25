@@ -3,7 +3,7 @@ interface SortParameters {
   linkName: string;
 }
 
-const sortingParameters: SortParameters[] = [
+const sortingParametersMovies: SortParameters[] = [
   {
     name: "Popularity",
     linkName: "popularity.desc",
@@ -18,4 +18,15 @@ const sortingParameters: SortParameters[] = [
   },
 ];
 
-export { sortingParameters };
+const sortingParametersTvShows: SortParameters[] = [
+  {
+    name: "Popularity",
+    linkName: "popularity.desc",
+  },
+  {
+    name: "Top rated",
+    linkName: "vote_average.desc",
+  },
+];
+
+export { sortingParametersMovies, sortingParametersTvShows };

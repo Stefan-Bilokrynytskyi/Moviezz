@@ -7,7 +7,7 @@ const Header: React.FC = () => {
       <h1 className="text-lightGrey text-6xl font-bold">
         Movie<span className="text-lightOrange">zz</span>
       </h1>
-      <nav className="flex gap-x-12 ml-24 mt-4">
+      <nav className="flex gap-x-11 ml-24 mt-4">
         <Link to="/">
           <div className="text-lightGrey text-2xl hover:text-lightOrange">
             Home
@@ -20,12 +20,7 @@ const Header: React.FC = () => {
         </Link>
         <Link to="/tv-shows">
           <div className="text-lightGrey text-2xl hover:text-lightOrange">
-            Series
-          </div>
-        </Link>
-        <Link to="/watchlist">
-          <div className="text-lightGrey text-2xl hover:text-lightOrange">
-            Cartoons
+            TV Shows
           </div>
         </Link>
       </nav>

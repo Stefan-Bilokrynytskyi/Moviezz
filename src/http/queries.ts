@@ -1,6 +1,7 @@
 import $api from "./http";
 import { countries } from "../ConfigurationData/countries";
 import { MovieCardData, MovieData } from "../Models/MoviesModels";
+import { TvShowCardData } from "../Models/TvShowsModels";
 
 export const fetchMovies = async (
   url: string
@@ -9,6 +10,18 @@ export const fetchMovies = async (
     const res = await $api.get(url);
     console.log(res.data);
     return { movies: res.data.results, totalPages: res.data.total_pages };
+  } catch (error: any) {
+    throw new Error(error.message || "An error occurred");
+  }
+};
+
+export const fetchTvShows = async (
+  url: string
+): Promise<{ tvShows: TvShowCardData[]; totalPages: number }> => {
+  try {
+    const res = await $api.get(url);
+    console.log(res.data);
+    return { tvShows: res.data.results, totalPages: res.data.total_pages };
   } catch (error: any) {
     throw new Error(error.message || "An error occurred");
   }
