@@ -7,7 +7,7 @@ import { parseNumberIntoStringShortcut } from "../utils";
 const Rating: React.FC<{
   rating: number;
   popularity: number;
-  revenue: number;
+  revenue?: number;
 }> = ({ rating, popularity, revenue }) => {
   console.log(rating);
   const integerPart: number = Math.floor(rating);
@@ -25,18 +25,20 @@ const Rating: React.FC<{
             {rating.toFixed(1)}
           </p>
         </div>
-        <div className="flex gap-1 items-center ">
+        <div className="flex gap-1 items-center">
           <img src={Top} alt="popularity" className="w-10 h-7" />
           <p className="text-lightGrey text-2xl">
             {parseNumberIntoStringShortcut(popularity)}
           </p>
         </div>
-        <div className="flex items-center">
-          <img src={Dollar} alt="revenue" className="w-7 h-7" />
-          <p className="text-lightGrey text-2xl">
-            {parseNumberIntoStringShortcut(revenue)}
-          </p>
-        </div>
+        {revenue !== undefined && (
+          <div className="flex items-center">
+            <img src={Dollar} alt="revenue" className="w-7 h-7" />
+            <p className="text-lightGrey text-2xl">
+              {parseNumberIntoStringShortcut(revenue)}
+            </p>
+          </div>
+        )}
       </div>
       <div className="flex justify-center gap-0">
         {stars.map((star, index) => (

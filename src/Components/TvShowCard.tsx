@@ -1,7 +1,6 @@
-import { MovieCardData } from "../Models/MoviesModels";
 import star from "../Icons/star.svg";
 import Projector from "../Icons/projector.svg";
-import GENRES from "../ConfigurationData/genres";
+import GENRES from "../ConfigurationData/tvShowGenres";
 import { Link } from "react-router-dom";
 import { TvShowCardData } from "../Models/TvShowsModels";
 
@@ -29,7 +28,7 @@ const TvShowCard: React.FC<{ tvShow: TvShowCardData }> = ({ tvShow }) => {
     </div>
   );
   return (
-    <Link to={`/tv/${tvShow.id}`}>
+    <Link to={`/tv-shows/${tvShow.id}`}>
       <div className="mb-5 h-fit">
         {poster}
         <h3 className="text-lightGrey text-lg mt-1">{tvShow.name}</h3>

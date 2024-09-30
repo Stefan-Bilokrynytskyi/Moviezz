@@ -18,6 +18,7 @@ import { getStringFromFilters } from "../utils";
 import Sort from "../Components/Sort";
 import Filter from "../Components/Filter";
 import { sortingParametersTvShows } from "../ConfigurationData/SortParameters";
+import { tvShowFilterParameters } from "../ConfigurationData/FilterParameters";
 
 interface Dropdown {
   name: string;
@@ -177,6 +178,7 @@ const SearchTvShowsPage: React.FC = () => {
                 }
                 onFilterChange={onFilterChange}
                 onFilterCancel={onFilterCancel}
+                filterParameters={tvShowFilterParameters}
               />
             </div>
             <div ref={sortRef} className="relative flex items-center">

@@ -4,6 +4,7 @@ import RootLayout from "./Pages/Root";
 import SearchFilmsPage from "./Pages/SearchFilmsPage";
 import FilmPage from "./Pages/FilmPage";
 import SearchTvShowsPage from "./Pages/SearchTvShowsPage";
+import TvShowPage from "./Pages/TvShowPage";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
         element: <SearchTvShowsPage />,
       },
       { path: "movies/:id", element: <FilmPage /> },
+      {
+        path: "tv-shows/:id",
+        element: <TvShowPage />,
+      },
     ],
   },
 ]);

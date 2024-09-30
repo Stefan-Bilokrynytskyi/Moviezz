@@ -6,3 +6,20 @@ export interface TvShowCardData {
   first_air_date: string;
   genre_ids: number[];
 }
+
+export interface TvShowData {
+  name: string;
+  original_name: string;
+  overview: string;
+  vote_average: number;
+  first_air_date: string;
+  poster_path: string;
+  country: string;
+  actors: string[];
+  trailer: string;
+  popularity: number;
+  seasons: number;
+  episodes: number;
+  genres: string[];
+  status: string;
+}

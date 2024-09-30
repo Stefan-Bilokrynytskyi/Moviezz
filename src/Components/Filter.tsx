@@ -1,5 +1,4 @@
 import filterIcon from "../Icons/filter.svg";
-import { filterParameters } from "../ConfigurationData/FilterParameters";
 import Button from "./Button";
 import FilterParametersList from "./FilterParametersList";
 import FilterListItem from "./FilterListItem";
@@ -11,6 +10,7 @@ interface FilterProps {
   isOpen: boolean;
   onFilterChange: () => void;
   onFilterCancel: () => void;
+  filterParameters: FilterParameter[];
 }
 interface FilterParameter {
   name: string;
@@ -21,6 +21,7 @@ const Filter: React.FC<FilterProps> = ({
   isOpen,
   onFilterChange,
   onFilterCancel,
+  filterParameters,
 }) => {
   const [currentFilter, setCurrentFilter] = useState<FilterParameter | null>(
     null

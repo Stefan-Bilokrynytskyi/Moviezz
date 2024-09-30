@@ -1,4 +1,4 @@
-const GENRES: { id: number; name: string }[] = [
+const MOVIE_GENRES: { id: number; name: string }[] = [
   {
     id: 28,
     name: "Action",
@@ -77,11 +77,13 @@ const GENRES: { id: number; name: string }[] = [
   },
 ];
 
-export default GENRES;
+export default MOVIE_GENRES;
 
-const genres: { name: string; linkName: string }[] = GENRES.map((genre) => ({
-  name: genre.name,
-  linkName: genre.id.toString(),
-}));
+const movieGenres: { name: string; linkName: string }[] = MOVIE_GENRES.map(
+  (genre) => ({
+    name: genre.name,
+    linkName: genre.id.toString(),
+  })
+);
 
-export { genres };
+export { movieGenres };

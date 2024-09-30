@@ -17,6 +17,7 @@ import useClickOutside from "../hooks/useClickOutside";
 import { getStringFromFilters } from "../utils";
 import useMount from "../hooks/useMount";
 import { sortingParametersMovies } from "../ConfigurationData/SortParameters";
+import { movieFilterParameters } from "../ConfigurationData/FilterParameters";
 
 interface Dropdown {
   name: string;
@@ -176,6 +177,7 @@ const SearchFilmsPage: React.FC = () => {
                 }
                 onFilterChange={onFilterChange}
                 onFilterCancel={onFilterCancel}
+                filterParameters={movieFilterParameters}
               />
             </div>
             <div ref={sortRef} className="relative flex items-center">

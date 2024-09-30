@@ -1,7 +1,7 @@
 import { MovieCardData } from "../Models/MoviesModels";
 import star from "../Icons/star.svg";
 import Projector from "../Icons/projector.svg";
-import GENRES from "../ConfigurationData/genres";
+import GENRES from "../ConfigurationData/movieGenres";
 import { Link } from "react-router-dom";
 
 const MovieCard: React.FC<{ movie: MovieCardData }> = ({ movie }) => {

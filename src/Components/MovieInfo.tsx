@@ -4,19 +4,27 @@ const MovieInfo: React.FC<{ info: { title: string; value: string }[] }> = ({
   return (
     <div className="flex gap-5">
       <div className="flex flex-col gap-3">
-        {info.map((item) => (
-          <p key={item.title} className="text-darkGrey text-2xl">
-            {item.title}
-          </p>
-        ))}
+        {info.map((item) =>
+          item.value ? (
+            <p key={item.title} className="text-darkGrey text-2xl">
+              {item.title}
+            </p>
+          ) : (
+            <></>
+          )
+        )}
       </div>
 
       <div className="flex flex-col gap-3">
-        {info.map((item) => (
-          <p key={item.value} className="text-lightGrey text-2xl">
-            {item.value}
-          </p>
-        ))}
+        {info.map((item) =>
+          item.value ? (
+            <p key={item.value} className="text-lightGrey text-2xl">
+              {item.value}
+            </p>
+          ) : (
+            <></>
+          )
+        )}
       </div>
     </div>
   );

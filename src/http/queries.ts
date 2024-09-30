@@ -1,7 +1,7 @@
 import $api from "./http";
 import { countries } from "../ConfigurationData/countries";
 import { MovieCardData, MovieData } from "../Models/MoviesModels";
-import { TvShowCardData } from "../Models/TvShowsModels";
+import { TvShowCardData, TvShowData } from "../Models/TvShowsModels";
 
 export const fetchMovies = async (
   url: string
@@ -85,6 +85,67 @@ export const fetchMovie = async (id: string): Promise<MovieData> => {
       title,
       trailer,
       vote_average,
+    };
+  } catch (error: any) {
+    throw new Error(error.message || "An error occurred");
+  }
+};
+
+export const fetchTvShow = async (id: string): Promise<TvShowData> => {
+  console.log(id);
+  try {
+    const res = await $api.get(`tv/${id}?append_to_response=credits,videos`);
+    const {
+      genres,
+      origin_country,
+      original_name,
+      number_of_seasons,
+      number_of_episodes,
+      overview,
+      poster_path,
+      first_air_date,
+      name,
+      vote_average,
+      popularity,
+      status,
+      credits,
+      videos,
+    } = res.data;
+
+    const sortedActors = credits.cast
+      .sort(
+        (a: { popularity: number }, b: { popularity: number }) =>
+          b.popularity - a.popularity
+      )
+      .slice(0, 8)
+      .map((actor: { name: string }) => actor.name);
+    console.log(sortedActors);
+    const trailer: string =
+      videos.results.length > 0
+        ? videos.results.find(
+            (video: { type: string; official: boolean }) =>
+              video.type === "Trailer" && video.official
+          )?.key || videos.results[0].key
+        : "";
+    console.log(credits);
+
+    return {
+      genres: genres.map((genre: { name: string }) => genre.name),
+      country:
+        countries.find((country) => country.linkName === origin_country[0])
+          ?.name || "",
+      actors: sortedActors,
+      overview,
+      popularity,
+      original_name,
+      poster_path,
+      first_air_date,
+      name,
+      trailer,
+      vote_average,
+      status,
+      seasons: number_of_seasons,
+      episodes: number_of_episodes,
     };
   } catch (error: any) {
     throw new Error(error.message || "An error occurred");
