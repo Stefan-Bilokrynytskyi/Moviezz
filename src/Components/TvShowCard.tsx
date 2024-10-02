@@ -23,7 +23,7 @@ const TvShowCard: React.FC<{ tvShow: TvShowCardData }> = ({ tvShow }) => {
       <img src={Projector} className="" alt="poster" />
 
       <h2 className="text-lightGrey text-2xl font-bold uppercase text-center">
-        Film is not available
+        TV-show is not available
       </h2>
     </div>
   );

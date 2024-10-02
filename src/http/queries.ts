@@ -2,6 +2,7 @@ import $api from "./http";
 import { countries } from "../ConfigurationData/countries";
 import { MovieCardData, MovieData } from "../Models/MoviesModels";
 import { TvShowCardData, TvShowData } from "../Models/TvShowsModels";
+import { PersonCardData } from "../Models/Person";
 
 export const fetchMovies = async (
   url: string
@@ -92,7 +93,6 @@ export const fetchMovie = async (id: string): Promise<MovieData> => {
 };
 
 export const fetchTvShow = async (id: string): Promise<TvShowData> => {
-  console.log(id);
   try {
     const res = await $api.get(`tv/${id}?append_to_response=credits,videos`);
     const {
@@ -119,7 +119,7 @@ export const fetchTvShow = async (id: string): Promise<TvShowData> => {
       )
       .slice(0, 8)
       .map((actor: { name: string }) => actor.name);
-    console.log(sortedActors);
+
     const trailer: string =
       videos.results.length > 0
         ? videos.results.find(
@@ -127,7 +127,6 @@ export const fetchTvShow = async (id: string): Promise<TvShowData> => {
               video.type === "Trailer" && video.official
           )?.key || videos.results[0].key
         : "";
-    console.log(credits);
 
     return {
       genres: genres.map((genre: { name: string }) => genre.name),
@@ -146,6 +145,41 @@ export const fetchTvShow = async (id: string): Promise<TvShowData> => {
       status,
       seasons: number_of_seasons,
       episodes: number_of_episodes,
+    };
+  } catch (error: any) {
+    throw new Error(error.message || "An error occurred");
+  }
+};
+
+export const multiSearch = async (
+  url: string
+): Promise<{
+  results: (MovieCardData | TvShowCardData | PersonCardData)[];
+  totalPages: number;
+}> => {
+  try {
+    const res = await $api.get(url);
+
+    const limitedResults = res.data.results.slice(0, 10);
+
+    const sortedResults = limitedResults.sort(
+      (
+        a: MovieCardData | TvShowCardData | PersonCardData,
+        b: MovieCardData | TvShowCardData | PersonCardData
+      ) => {
+        if (a.media_type === "person" && b.media_type !== "person") {
+          return 1;
+        } else if (a.media_type !== "person" && b.media_type === "person") {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+    );
+
+    return {
+      results: sortedResults,
+      totalPages: res.data.total_pages,
     };
   } catch (error: any) {
     throw new Error(error.message || "An error occurred");

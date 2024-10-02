@@ -8,6 +8,10 @@ import ReactPlayer from "react-player";
 import PlayIcon from "../Icons/play.svg";
 import BlackBg from "../Icons/black-bg.svg";
 import PlayIconDisabled from "../Icons/playDisabled.svg";
+import { useRef } from "react";
+import ErrorModal from "../Components/ErrorModal";
+import { useNavigate } from "react-router-dom";
+import Projector from "../Icons/projector.svg";
 
 const FilmPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,25 +21,40 @@ const FilmPage: React.FC = () => {
       queryFn: () => fetchMovie(id || ""),
       enabled: !!id,
     });
+  const modalRef = useRef<HTMLDialogElement>(null);
   let content: JSX.Element | null = null;
+  const navigate = useNavigate();
 
   if (isLoading) {
     content = <div>Loading...</div>;
   }
 
   if (isError) {
-    content = <div>Error: {(error as Error).message}</div>;
+    modalRef.current?.showModal();
+    content = <></>;
+    console.error((error as Error).message);
   }
   if (data) {
+    console.log(data.poster_path);
     content = (
       <div className="mx-28 mt-14">
         <div className="flex gap-6 justify-start">
           <div className="w-1/4 flex-shrink-0">
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
-              alt="poster"
-              className="object-contain"
-            />
+            {data.poster_path ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
+                alt="poster"
+                className="object-contain"
+              />
+            ) : (
+              <div className="w-full h-5/6 flex flex-col justify-center">
+                <img src={Projector} className="" alt="poster" />
+
+                <h2 className="text-lightGrey text-2xl font-bold uppercase text-center">
+                  Poster is not available
+                </h2>
+              </div>
+            )}
             <Rating
               rating={data.vote_average}
               popularity={data.popularity}
@@ -97,7 +116,12 @@ const FilmPage: React.FC = () => {
     );
     console.log(data.trailer);
   }
-  return <>{content}</>;
+  return (
+    <>
+      <ErrorModal ref={modalRef} onReset={() => navigate("/")} />
+      {content}
+    </>
+  );
 };
 
 export default FilmPage;

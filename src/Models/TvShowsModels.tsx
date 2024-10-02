@@ -4,6 +4,7 @@ export interface TvShowCardData {
   vote_average: number;
   poster_path: string;
   first_air_date: string;
+  media_type?: "tv";
   genre_ids: number[];
 }
 

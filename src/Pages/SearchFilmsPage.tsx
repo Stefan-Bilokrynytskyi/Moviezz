@@ -3,7 +3,7 @@ import { fetchMovies } from "../http/queries";
 import { MovieCardData } from "../Models/MoviesModels";
 import MovieCard from "../Components/MovieCard";
 import NothingFound from "../Components/NothingFound";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../Components/Pagination";
 import Sort from "../Components/Sort";

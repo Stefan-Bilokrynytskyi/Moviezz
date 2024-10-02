@@ -91,7 +91,7 @@ const SearchTvShowsPage: React.FC = () => {
     );
     navigate(`?${queryParameters}`);
     queryClient.invalidateQueries({
-      queryKey: ["movies", queryParameters],
+      queryKey: ["tvshows", queryParameters],
     });
   };
 
@@ -109,7 +109,7 @@ const SearchTvShowsPage: React.FC = () => {
     );
     navigate(`?${queryParameters}`);
     queryClient.invalidateQueries({
-      queryKey: ["movies", queryParameters],
+      queryKey: ["tvshows", queryParameters],
     });
   };
 
@@ -133,7 +133,7 @@ const SearchTvShowsPage: React.FC = () => {
 
     navigate(`?${queryParameters}`);
     queryClient.invalidateQueries({
-      queryKey: ["movies", queryParameters],
+      queryKey: ["tvshows", queryParameters],
     });
   };
 
@@ -149,7 +149,7 @@ const SearchTvShowsPage: React.FC = () => {
     const queryParameters = decodeURIComponent(queryParams.toString());
     navigate(`?${queryParameters}`);
     queryClient.invalidateQueries({
-      queryKey: ["movies", queryParameters],
+      queryKey: ["tvshows", queryParameters],
     });
   };
 

@@ -5,6 +5,7 @@ export interface MovieCardData {
   vote_average: number;
   release_date: string;
   poster_path: string;
+  media_type?: "movie";
   genre_ids: number[];
 }
 

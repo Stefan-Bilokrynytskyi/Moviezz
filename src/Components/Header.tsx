@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Search from "../Icons/search.svg";
+import Search from "./Search";
 
 const Header: React.FC = () => {
   return (
@@ -24,17 +24,7 @@ const Header: React.FC = () => {
           </div>
         </Link>
       </nav>
-      <div className="relative ml-auto mt-4 w-96">
-        <input
-          className="w-full text-lg h-12 bg-transparent rounded-xl px-4  border border-lightGrey text-lightGrey focus:outline-none"
-          placeholder="Search..."
-        />
-        <img
-          src={Search}
-          alt="search"
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-lightGrey"
-        />
-      </div>
+      <Search />
       <button className="ml-auto text-2xl bg-lightOrange text-white px-4 py-2 rounded-lg mt-4 hover:bg-orange-600">
         Sign In
       </button>
