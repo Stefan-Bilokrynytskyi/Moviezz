@@ -3,16 +3,18 @@ import Arrow from "../Icons/arrow-left-search.svg";
 import { useState, useRef } from "react";
 import useClickOutside from "../hooks/useClickOutside";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { multiSearch } from "../http/queries";
+import { quickMultiSearch } from "../http/queries";
 import { MovieCardData } from "../Models/MoviesModels";
 import { TvShowCardData } from "../Models/TvShowsModels";
 import { PersonCardData } from "../Models/Person";
 import SearchCard from "./SearchCard";
+import { useNavigate } from "react-router-dom";
 
 const Search: React.FC = () => {
   const searchRef = useRef<HTMLDivElement>(null);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const navigate = useNavigate();
 
   const {
     data,
@@ -21,10 +23,9 @@ const Search: React.FC = () => {
     error,
   }: UseQueryResult<{
     results: (MovieCardData | TvShowCardData | PersonCardData)[];
-    totalPages: number;
   }> = useQuery({
     queryKey: ["search", searchTerm],
-    queryFn: () => multiSearch(`search/multi?query=${searchTerm}`),
+    queryFn: () => quickMultiSearch(`search/multi?query=${searchTerm}`),
     enabled: searchTerm.length > 1,
   });
 
@@ -39,6 +40,16 @@ const Search: React.FC = () => {
   };
 
   useClickOutside([searchRef], () => setIsSearchOpen(false));
+
+  const handleSearchClick = (): void => {
+    const encodedSearchTerm = encodeURIComponent(searchTerm.trim()).replace(
+      /%20/g,
+      "+"
+    );
+    navigate(`/search?query=${encodedSearchTerm}&page=${1}`);
+    setSearchTerm("");
+    setIsSearchOpen(false);
+  };
 
   return (
     <div className="relative ml-auto mt-4 w-96" ref={searchRef}>
@@ -63,6 +74,7 @@ const Search: React.FC = () => {
         src={SearchIcon}
         alt="search"
         className="absolute right-4 top-1/2 transform -translate-y-1/2 text-lightGrey hover:cursor-pointer"
+        onClick={handleSearchClick}
       />
       {data && isSearchOpen && data.results.length > 0 && (
         <div className="absolute w-full px-3 py-1 bg-lightBlack top-full mt-3 right-0 border border-dropdownGrey rounded-xl">

@@ -151,11 +151,10 @@ export const fetchTvShow = async (id: string): Promise<TvShowData> => {
   }
 };
 
-export const multiSearch = async (
+export const quickMultiSearch = async (
   url: string
 ): Promise<{
   results: (MovieCardData | TvShowCardData | PersonCardData)[];
-  totalPages: number;
 }> => {
   try {
     const res = await $api.get(url);
@@ -179,7 +178,26 @@ export const multiSearch = async (
 
     return {
       results: sortedResults,
+    };
+  } catch (error: any) {
+    throw new Error(error.message || "An error occurred");
+  }
+};
+
+export const multiSearch = async (
+  url: string
+): Promise<{
+  results: (MovieCardData | TvShowCardData | PersonCardData)[];
+  totalPages: number;
+  totalResults: number;
+}> => {
+  try {
+    const res = await $api.get(url);
+
+    return {
+      results: res.data.results,
       totalPages: res.data.total_pages,
+      totalResults: res.data.total_results,
     };
   } catch (error: any) {
     throw new Error(error.message || "An error occurred");
