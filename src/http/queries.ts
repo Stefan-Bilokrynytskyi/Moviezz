@@ -2,7 +2,7 @@ import $api from "./http";
 import { countries } from "../ConfigurationData/countries";
 import { MovieCardData, MovieData } from "../Models/MoviesModels";
 import { TvShowCardData, TvShowData } from "../Models/TvShowsModels";
-import { PersonCardData } from "../Models/Person";
+import { PersonCardData, PersonData } from "../Models/Person";
 
 export const fetchMovies = async (
   url: string
@@ -198,6 +198,89 @@ export const multiSearch = async (
       results: res.data.results,
       totalPages: res.data.total_pages,
       totalResults: res.data.total_results,
+    };
+  } catch (error: any) {
+    throw new Error(error.message || "An error occurred");
+  }
+};
+
+export const fetchPerson = async (
+  url: string
+): Promise<{
+  person: PersonData;
+}> => {
+  try {
+    const res = await $api.get(url);
+
+    const {
+      name,
+      birthday,
+      deathday,
+      place_of_birth,
+      biography,
+      profile_path,
+      known_for_department,
+      movie_credits,
+      tv_credits,
+    } = res.data;
+
+    const projects: {
+      job: string;
+      movies: MovieCardData[];
+      tvShows: TvShowCardData[];
+    }[] = [];
+
+    const addProject = (
+      job: string,
+      movie?: MovieCardData,
+      tvShow?: TvShowCardData
+    ) => {
+      let project = projects.find((project) => project.job === job);
+      if (!project) {
+        project = { job, movies: [], tvShows: [] };
+        projects.push(project);
+      }
+
+      if (movie) {
+        const movieExists = project.movies.some((m) => m.id === movie.id);
+        if (!movieExists) {
+          project.movies.push(movie);
+        }
+      }
+
+      if (tvShow) {
+        const tvShowExists = project.tvShows.some((t) => t.id === tvShow.id);
+        if (!tvShowExists) {
+          project.tvShows.push(tvShow);
+        }
+      }
+    };
+
+    movie_credits.cast.forEach((movie: MovieCardData) =>
+      addProject("Actor", movie)
+    );
+    tv_credits.cast.forEach((tvShow: TvShowCardData) =>
+      addProject("Actor", undefined, tvShow)
+    );
+
+    movie_credits.crew.forEach((movie: MovieCardData) =>
+      addProject(movie.job || "", movie)
+    );
+    tv_credits.crew.forEach((tvShow: TvShowCardData) =>
+      addProject(tvShow.job || "", undefined, tvShow)
+    );
+
+    return {
+      person: {
+        name,
+        birthday,
+        deathday,
+        place_of_birth,
+        biography,
+        profile_path,
+        known_for_department,
+        projects,
+      },
     };
   } catch (error: any) {
     throw new Error(error.message || "An error occurred");

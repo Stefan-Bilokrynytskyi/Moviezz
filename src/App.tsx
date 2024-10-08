@@ -6,6 +6,7 @@ import FilmPage from "./Pages/FilmPage";
 import SearchTvShowsPage from "./Pages/SearchTvShowsPage";
 import TvShowPage from "./Pages/TvShowPage";
 import SearchPage from "./Pages/SearchPage";
+import PersonPage from "./Pages/PersonPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
         path: "tv-shows/:id",
         element: <TvShowPage />,
       },
+      { path: "person/:id", element: <PersonPage /> },
       { path: "search", element: <SearchPage /> },
     ],
   },

@@ -47,8 +47,8 @@ const FilmPage: React.FC = () => {
                 className="object-contain"
               />
             ) : (
-              <div className="w-full h-5/6 flex flex-col justify-center">
-                <img src={Projector} className="" alt="poster" />
+              <div className="w-full flex flex-col justify-center flex-grow-0">
+                <img src={Projector} className="h-5/6" alt="poster" />
 
                 <h2 className="text-lightGrey text-2xl font-bold uppercase text-center">
                   Poster is not available
@@ -118,7 +118,7 @@ const FilmPage: React.FC = () => {
   }
   return (
     <>
-      <ErrorModal ref={modalRef} onReset={() => navigate("/")} />
+      <ErrorModal ref={modalRef} onReset={() => navigate(-1)} />
       {content}
     </>
   );

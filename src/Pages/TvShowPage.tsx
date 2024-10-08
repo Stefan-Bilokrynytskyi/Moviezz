@@ -35,6 +35,7 @@ const TvShowPage: React.FC = () => {
   }
 
   if (data) {
+    console.log(data);
     content = (
       <div className="mx-28 mt-14">
         <div className="flex gap-6 justify-start">
@@ -46,8 +47,8 @@ const TvShowPage: React.FC = () => {
                 className="object-contain"
               />
             ) : (
-              <div className="w-full h-5/6 flex flex-col justify-center">
-                <img src={Projector} className="" alt="poster" />
+              <div className="w-full flex flex-col justify-center">
+                <img src={Projector} className="h-5/6" alt="poster" />
 
                 <h2 className="text-lightGrey text-2xl font-bold uppercase text-center">
                   Poster is not available
@@ -114,7 +115,7 @@ const TvShowPage: React.FC = () => {
   }
   return (
     <>
-      <ErrorModal ref={modalRef} onReset={() => navigate("/")} />
+      <ErrorModal ref={modalRef} onReset={() => navigate(-1)} />
       {content}
     </>
   );

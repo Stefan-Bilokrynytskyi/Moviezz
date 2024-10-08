@@ -3,6 +3,7 @@ import { MovieCardData } from "../Models/MoviesModels";
 import { TvShowCardData } from "../Models/TvShowsModels";
 import { PersonCardData } from "../Models/Person";
 import { Link } from "react-router-dom";
+import Projector from "../Icons/projector.svg";
 
 interface SearchCardProps {
   card: MovieCardData | TvShowCardData | PersonCardData;
@@ -14,9 +15,11 @@ const SearchCard: React.FC<SearchCardProps> = ({ card, onLinkClick }) => {
 
   if (card.media_type === "person") {
     content = (
-      <div className="text-lightGrey text-xl hover:cursor-pointer hover:underline">
-        {(card as PersonCardData).name}
-      </div>
+      <Link to={`/person/${card.id}`} onClick={onLinkClick}>
+        <div className="text-lightGrey text-xl hover:cursor-pointer hover:underline">
+          {(card as PersonCardData).name}
+        </div>
+      </Link>
     );
   } else if (card.media_type === "movie" || card.media_type === "tv") {
     content = (
@@ -25,19 +28,24 @@ const SearchCard: React.FC<SearchCardProps> = ({ card, onLinkClick }) => {
         onClick={onLinkClick}
       >
         <div className="flex gap-2 items-start group">
-          <img
-            src={`https://image.tmdb.org/t/p/w500/${card.poster_path}`}
-            alt="poster"
-            className="w-12 h-12"
-          />
-          <div className="flex flex-col justify-between">
-            <div className="text-lg text-lightGrey group-hover:underline hover:cursor-pointer">
+          {card.poster_path ? (
+            <img
+              src={`https://image.tmdb.org/t/p/w500/${card.poster_path}`}
+              alt="poster"
+              className="w-12 h-12 flex-shrink-0"
+            />
+          ) : (
+            <img src={Projector} alt="projector" className="w-12 h-12" />
+          )}
+
+          <div className="flex flex-col justify-between min-h-12">
+            <div className="text-base text-lightGrey  group-hover:underline hover:cursor-pointer">
               {card.media_type === "movie"
                 ? (card as MovieCardData).title
                 : (card as TvShowCardData).name}
             </div>
-            <p className="text-lightGrey text-sm flex items-start">
-              <img src={Star} alt="star" />
+            <p className="text-lightGrey text-sm flex items-center">
+              <img src={Star} alt="star" className="w-4 h-4" />
               {"vote_average" in card && (
                 <>
                   <span className="text-lightOrange ml-1">

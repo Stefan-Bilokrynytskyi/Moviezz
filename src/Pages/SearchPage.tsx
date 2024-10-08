@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { multiSearch } from "../http/queries";
 import { MovieCardData } from "../Models/MoviesModels";
 import { TvShowCardData } from "../Models/TvShowsModels";
@@ -74,12 +74,11 @@ const SearchPage: React.FC = () => {
             <div className="text-3xl text-lightGrey mt-5 mb-3">Found Names</div>
             <div className="flex flex-wrap gap-3">
               {foundPeople.map((person) => (
-                <span
-                  className="text-xl text-lightGrey hover:underline hover:cursor-pointer"
-                  key={person.id}
-                >
-                  {person.name}
-                </span>
+                <Link to={`/person/${person.id}`} key={person.id}>
+                  <span className="text-xl text-lightGrey hover:underline hover:cursor-pointer">
+                    {person.name}
+                  </span>
+                </Link>
               ))}
             </div>
           </>

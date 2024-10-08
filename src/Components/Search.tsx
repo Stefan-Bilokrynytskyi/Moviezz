@@ -9,6 +9,7 @@ import { TvShowCardData } from "../Models/TvShowsModels";
 import { PersonCardData } from "../Models/Person";
 import SearchCard from "./SearchCard";
 import { useNavigate } from "react-router-dom";
+import "../hideScroll.css";
 
 const Search: React.FC = () => {
   const searchRef = useRef<HTMLDivElement>(null);
@@ -77,7 +78,7 @@ const Search: React.FC = () => {
         onClick={handleSearchClick}
       />
       {data && isSearchOpen && data.results.length > 0 && (
-        <div className="absolute w-full px-3 py-1 bg-lightBlack top-full mt-3 right-0 border border-dropdownGrey rounded-xl">
+        <div className="absolute w-full max-h-[80vh] scrollbar-hide overflow-y-auto px-3 py-1 bg-lightBlack top-full mt-3 right-0 border border-dropdownGrey rounded-xl z-10">
           <div className="flex flex-col gap-3">
             {data.results.map((result) => (
               <SearchCard

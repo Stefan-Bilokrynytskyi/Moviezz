@@ -9,12 +9,19 @@ const Rating: React.FC<{
   popularity: number;
   revenue?: number;
 }> = ({ rating, popularity, revenue }) => {
-  console.log(rating);
   const integerPart: number = Math.floor(rating);
   const fractionalPart: number = parseFloat((rating - integerPart).toFixed(1));
-  const stars: number[] = Array(integerPart)
-    .fill(1)
-    .concat(fractionalPart, Array(10 - integerPart - 1).fill(0));
+  let stars: number[];
+
+  if (rating === 10) {
+    stars = Array(10).fill(1);
+  } else {
+    stars = Array(integerPart)
+      .fill(1)
+      .concat(fractionalPart, Array(10 - integerPart - 1).fill(0));
+  }
+
+  console.log(stars);
 
   return (
     <>

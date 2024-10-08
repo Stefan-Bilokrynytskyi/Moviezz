@@ -6,6 +6,7 @@ export interface MovieCardData {
   release_date: string;
   poster_path: string;
   media_type?: "movie";
+  job?: string;
   genre_ids: number[];
 }
 
